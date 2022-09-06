@@ -1,3 +1,15 @@
 .usersContainer{
     color: #000;
 }
+.userRow{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+.userRow h1{
+    padding-right: 2%;
+}
+.delete{
+    color: red;
+}
