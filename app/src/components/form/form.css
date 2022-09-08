@@ -1,0 +1,11 @@
+.modalHeader{
+    background-color: rgb(4, 4, 45);
+    color: #fff;
+}
+.modalHeader button{
+    color: #fff;
+}
+.userForm{
+    display: flex;
+    flex-direction: column;
+}

@@ -85,18 +85,19 @@ export const fetchUsers = () => async (dispatch) => {
 }
 /////////////
 export const createUser = (user) => async (dispatch) => {
-    dispatch(createUserStart())
-    try {
-        const response = await createUserService(user)
-        console.log(response.data)
-        dispatch(createUserSuccess(response.data))
-        dispatch(fetchUsers())
+    console.log("createuser",user)
+    // dispatch(createUserStart())
+    // try {
+    //     const response = await createUserService(user)
+    //     console.log(response.data)
+    //     dispatch(createUserSuccess(response.data))
+    //     dispatch(fetchUsers())
 
-    }
-    catch (err) {
-        dispatch(createUserFailure(err.message)) ////////////
+    // }
+    // catch (err) {
+    //     dispatch(createUserFailure(err.message)) ////////////
 
-    }
+    // }
 }
 /////////////////
 export const updateUser = (id, newUser) => async (dispatch) => {
@@ -105,11 +106,12 @@ export const updateUser = (id, newUser) => async (dispatch) => {
         const response = await updateUserService(id, newUser)
         console.log(response)
         dispatch(updateUserSuccess(response))
+        dispatch(fetchUsers())
 
     }
     catch (err) {
-        dispatch(updateUserFailure(err.message)) ////////////
-
+        dispatch(updateUserFailure(err.message)) 
+   
     }
 
 }
