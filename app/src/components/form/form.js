@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {createUser,updateUser} from "../../store/users/users.actions"
+import {createUser,updateUser,fetchUser} from "../../store/users/users.actions"
 import "./form.css"
-import { useDispatch} from "react-redux";
+import { useDispatch , useSelector} from "react-redux";
 
 const UserForm = (props) => {
     const dispatch = useDispatch();
+    const activeUser = useSelector(({ users }) => users.activeUser);
 
+    // useEffect(() => {
+    //     console.log("form useEffect",props)
+    //     props.userid&&
+    //     dispatch(fetchUser(props.userid))
+    // },)
     const validate = values =>{
         const errors ={}
 
@@ -45,16 +51,17 @@ const UserForm = (props) => {
                 firstName: "",
                 lastName: "",
                 title: "",
-                email: "",
+                email:"",
             }
             ,
             validate
             ,
-            onSubmit:( values,{props,setSubmitting}) => {
+            onSubmit:( values) => {
                 console.log(values);
-                dispatch( createUser(values));
-                setSubmitting(false);
-            
+                props.userid?
+                dispatch(updateUser(props.userid,values))
+                :  
+                dispatch( createUser(values));          
             }
 
         }

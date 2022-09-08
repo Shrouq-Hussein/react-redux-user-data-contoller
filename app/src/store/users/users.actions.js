@@ -1,5 +1,5 @@
 import { UsersActionTypes } from "./users.types"
-import { fetchUsersService, createUserService, updateUserService ,deleteUserService } from "./users.services"
+import { fetchUsersService, createUserService, updateUserService ,deleteUserService ,fetchUserService} from "./users.services"
 
 export const fetchUsersStart = () => {
     return {
@@ -83,21 +83,46 @@ export const fetchUsers = () => async (dispatch) => {
         dispatch(fetchUsersFailure(err.message))
     }
 }
+///////////////////////////////
+export const fetchUserSuccess =(user) =>{
+   return {
+        type: UsersActionTypes.FETCH_USER_SUCCESS,
+        payload: user,
+    }
+}
+
+export const fetchUserFailure = (errorMsg) => (
+    {
+        type: UsersActionTypes.FETCH_USER_FAILURE,
+        payload: errorMsg
+    }
+)
+export const fetchUser = (id) => async (dispatch) => {
+    console.log("fetchUser")
+    try {
+        const response = await fetchUserService(id)
+        console.log("response : ", response.data)
+        dispatch(fetchUserSuccess(response.data))
+    }
+    catch (err) {
+        dispatch(fetchUserFailure(err.message))
+    }
+}
 /////////////
 export const createUser = (user) => async (dispatch) => {
     console.log("createuser",user)
-    // dispatch(createUserStart())
-    // try {
-    //     const response = await createUserService(user)
-    //     console.log(response.data)
-    //     dispatch(createUserSuccess(response.data))
-    //     dispatch(fetchUsers())
+    dispatch(createUserStart())
+    try {
+        const response = await createUserService(user)
+        console.log(response.data)
+        dispatch(createUserSuccess(response.data))
+        dispatch(fetchUsers())
 
-    // }
-    // catch (err) {
-    //     dispatch(createUserFailure(err.message)) ////////////
+    }
+    catch (err) {
+        dispatch(createUserFailure(err.message)) 
 
-    // }
+    }
 }
 /////////////////
 export const updateUser = (id, newUser) => async (dispatch) => {

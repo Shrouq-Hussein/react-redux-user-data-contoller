@@ -1,7 +1,11 @@
 import apiClient from "../../apiClient";
 
 export const fetchUsersService = ()=>{
-    return apiClient.get("user?")
+    return apiClient.get("user")
+}
+
+export const fetchUserService =(id)=>{
+    return apiClient.get(`user/${id}`)
 }
 
 export const createUserService = (user)=>{

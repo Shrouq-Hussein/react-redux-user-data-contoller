@@ -3,6 +3,7 @@ const initialState = {
     isLoading: false,
     users: [],
     errorMessage: null,
+    activeUser:{},
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -78,6 +79,16 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                errorMessage: action.payload,
+            }
+        case UsersActionTypes.FETCH_USER_SUCCESS:
+            return {
+                ...state,
+                activeUser: action.payload,
+            }
+        case UsersActionTypes.FETCH_USER_FAILURE:
+            return {
+                ...state,
                 errorMessage: action.payload,
             }
         default:

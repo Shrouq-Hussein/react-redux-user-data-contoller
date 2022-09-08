@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import "./users.css"
-import { fetchUsers, createUser, updateUser, deleteUser } from "../../store/users/users.actions"
+import { fetchUsers, createUser, updateUser, deleteUser ,fetchUser} from "../../store/users/users.actions"
 import UserForm from "../form/form"
 import { Button } from "reactstrap"
 
@@ -9,9 +9,9 @@ import MaterialTable from "material-table";
 import tableIcons from "./MaterialTableIcons";
 
 export default function Users() {
+
     const [modal, setModal] = useState(false);
     const [userId, setUserId] = useState("");
-
     const toggle = () => setModal(!modal);
 
 
@@ -32,7 +32,7 @@ export default function Users() {
     ]
     useEffect(() => {
         dispatch(fetchUsers())
-        console.log(usersList)
+        // console.log(usersList)
     }, [])
 
 
@@ -57,13 +57,36 @@ export default function Users() {
                             </div>
                             <UserForm modal={modal} toggle={toggle} userid={userId} />
 
-                            <MaterialTable title="" columns={columns} data={usersList} icons={tableIcons} />
+                            <MaterialTable 
+                            title="" 
+                            columns={columns}
+                            data={usersList}
+                            icons={tableIcons} 
+                            actions= {[
+                                {
+                                  icon: tableIcons.Delete,
+                                  tooltip: "Delete User",
+                                  onClick: (event, rowData) =>{ dispatch(deleteUser( rowData.id))},
+                                },
+                                {
+                                  icon: tableIcons.Edit,
+                                  tooltip: "Edit User",
+                                  onClick:(event, rowData) => {  toggle() ; setUserId(rowData.id); dispatch(fetchUser(rowData.id))},
+                                },
+                                {
+                                    icon: tableIcons.Add,
+                                    tooltip: "Add User",
+                                    isFreeAction: true,
+                                    onClick:() => { toggle(); setUserId("") },
+                                  },
+                              ]}
+                            />
                             {/* {
                                 usersList.map((user) =>
                                 (
                                     <div key={user.id} className="userRow">
-                                        {/* <h1 onClick={() => { dispatch(updateUser(user.id, { firstName: "Sarsoooooor", })) }} > *
-                                        <h1 onClick={()=>{ toggle() ; setUserId(user.id)}} >
+                                        {/* {/* <h1 onClick={() => { dispatch(updateUser(user.id, { firstName: "Sarsoooooor", })) }} > 
+                                        <h1 onClick={()=>{ toggle() ; setUserId(user.id); dispatch(fetchUser(user.id))}} >
 
                                             firstName:  {user.firstName} | lastName: {user.lastName} | title: {user.title}
                                         </h1>
