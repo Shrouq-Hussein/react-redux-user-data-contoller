@@ -103,6 +103,7 @@ export const fetchUser = (id) => async (dispatch) => {
         const response = await fetchUserService(id)
         console.log("response : ", response.data)
         dispatch(fetchUserSuccess(response.data))
+        return response
     }
     catch (err) {
         dispatch(fetchUserFailure(err.message))

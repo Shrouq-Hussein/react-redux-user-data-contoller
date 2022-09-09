@@ -1,7 +1,7 @@
 import apiClient from "../../apiClient";
 
 export const fetchUsersService = ()=>{
-    return apiClient.get("user")
+    return apiClient.get("user?limit=100")
 }
 
 export const fetchUserService =(id)=>{

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import "./users.css"
-import { fetchUsers, createUser, updateUser, deleteUser ,fetchUser} from "../../store/users/users.actions"
+import { fetchUsers, createUser, updateUser, deleteUser, fetchUser } from "../../store/users/users.actions"
 import UserForm from "../form/form"
 import { Button } from "reactstrap"
 
@@ -20,15 +20,15 @@ export default function Users() {
     const isLoading = useSelector(({ users }) => users.isLoading);
     const errorMessage = useSelector(({ users }) => users.errorMessage);
     const columns = [
-        { 
+        {
             title: "Pic",
-            field: "picture" ,
+            field: "picture",
             render: (rowData) => <img src={rowData.picture} style={{ width: 40, borderRadius: "50%" }} />,
         },
         { title: "Title", field: "title" },
         { title: "First Name", field: "firstName" },
         { title: "Last Name", field: "lastName" },
-  
+
     ]
     useEffect(() => {
         dispatch(fetchUsers())
@@ -55,31 +55,36 @@ export default function Users() {
                                     + Add New
                                 </Button>
                             </div>
-                            <UserForm modal={modal} toggle={toggle} userid={userId} />
 
-                            <MaterialTable 
-                            title="" 
-                            columns={columns}
-                            data={usersList}
-                            icons={tableIcons} 
-                            actions= {[
-                                {
-                                  icon: tableIcons.Delete,
-                                  tooltip: "Delete User",
-                                  onClick: (event, rowData) =>{ dispatch(deleteUser( rowData.id))},
-                                },
-                                {
-                                  icon: tableIcons.Edit,
-                                  tooltip: "Edit User",
-                                  onClick:(event, rowData) => {  toggle() ; setUserId(rowData.id); dispatch(fetchUser(rowData.id))},
-                                },
-                                {
-                                    icon: tableIcons.Add,
-                                    tooltip: "Add User",
-                                    isFreeAction: true,
-                                    onClick:() => { toggle(); setUserId("") },
-                                  },
-                              ]}
+                           {modal&& <UserForm modal={modal} toggle={toggle} userid={userId} />}
+
+                            <MaterialTable
+                                title=""
+                                columns={columns}
+                                data={usersList.map(user => Object.assign({}, user))}
+                                icons={tableIcons}
+                                actions={[
+                                    {
+                                        icon: tableIcons.Delete,
+                                        tooltip: "Delete User",
+                                        onClick: (event, rowData) => { dispatch(deleteUser(rowData.id)) },
+                                    },
+                                    {
+                                        icon: tableIcons.Edit,
+                                        tooltip: "Edit User",
+                                        onClick: async (event, rowData) => {
+                                            setUserId(rowData.id);
+                                            const res= await dispatch(fetchUser(rowData.id));
+                                            toggle();
+                                        },
+                                    },
+                                    {
+                                        icon: tableIcons.Add,
+                                        tooltip: "Add User",
+                                        isFreeAction: true,
+                                        onClick: () => { toggle(); setUserId("") },
+                                    },
+                                ]}
                             />
                             {/* {
                                 usersList.map((user) =>
